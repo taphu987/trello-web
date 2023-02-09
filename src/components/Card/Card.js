@@ -1,15 +1,22 @@
-import React from "react";
+import React from 'react';
 
-import "./Card.scss";
+import './Card.scss';
 
 const Card = (props) => {
     const { card } = props;
 
     return (
-        <li className="card-item">
-            {card.cover && <img className="card-cover" src={card.cover} alt="phuta-alt-img" />}
+        <div className="card-item">
+            {card.cover && (
+                <img
+                    className="card-cover"
+                    src={card.cover}
+                    alt="phuta-alt-img"
+                    onMouseDown={(e) => e.preventDefault()}
+                />
+            )}
             {card.title}
-        </li>
+        </div>
     );
 };
 
