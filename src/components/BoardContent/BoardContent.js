@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { isEmpty } from 'lodash';
 import { Container, Draggable } from 'react-smooth-dnd';
+import { Container as BootstrapContainer, Row, Col, Form, Button } from 'react-bootstrap';
 
 import './BoardContent.scss';
 import Column from 'components/Column/Column';
@@ -11,6 +12,12 @@ import { applyDrag } from 'utils/dragDrop';
 const BoardContent = () => {
     const [board, setBoard] = useState({});
     const [columns, setColumns] = useState([]);
+    const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
+    const [newColumnTitle, setNewColumnTitle] = useState('');
+
+    const refInput = useRef();
+
+    const onNewColumnTitleChange = useCallback((e) => setNewColumnTitle(e.target.value), []);
 
     useEffect(() => {
         const boardFromDB = initialData.boards.find((board) => board.id === 'board-1');
@@ -21,6 +28,13 @@ const BoardContent = () => {
             setColumns(mapOrder(boardFromDB.columns, boardFromDB.columnOrder, 'id'));
         }
     }, []);
+
+    useEffect(() => {
+        if (refInput && refInput.current) {
+            refInput.current.focus();
+            refInput.current.select();
+        }
+    }, [openNewColumnForm]);
 
     if (isEmpty(board)) {
         return (
@@ -54,6 +68,35 @@ const BoardContent = () => {
         }
     };
 
+    const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm);
+
+    const addNewColumn = () => {
+        const newColumnToAdd = {
+            id: Math.random().toString(36).substring(2, 5), // 5 random characters, will remove when we implement code api
+            boardId: board.id,
+            title: newColumnTitle.trim(),
+            cardOrder: [],
+            cards: []
+        };
+
+        if (!newColumnTitle || !newColumnTitle.trim()) {
+            refInput.current.focus();
+            return;
+        }
+
+        let newColumns = [...columns];
+        newColumns.push(newColumnToAdd);
+
+        let newBoard = { ...board };
+        newBoard.columnOrder = newColumns.map((c) => c.id);
+        newBoard.columns = newColumns;
+
+        setColumns(newColumns);
+        setBoard(newBoard);
+        setNewColumnTitle('');
+        toggleOpenNewColumnForm();
+    };
+
     return (
         <div className="board-content">
             <Container
@@ -74,10 +117,45 @@ const BoardContent = () => {
                 ))}
             </Container>
 
-            <div className="add-new-column">
-                <i className="fa fa-plus icon" /> Add another column
-                {/* <p>Add another column</p> */}
-            </div>
+            <BootstrapContainer className="trello-column-container">
+                {!openNewColumnForm ? (
+                    <Row>
+                        <Col className="add-new-column" onClick={toggleOpenNewColumnForm}>
+                            <i className="fa fa-plus icon" /> Add another column
+                        </Col>
+                    </Row>
+                ) : (
+                    <Row>
+                        <Col
+                            className="enter-new-column"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Escape') {
+                                    setOpenNewColumnForm(false);
+                                }
+                            }}
+                        >
+                            <Form.Control
+                                type="text"
+                                className="input-enter-new-column"
+                                placeholder="Enter column title..."
+                                // autoFocus
+                                ref={refInput}
+                                value={newColumnTitle}
+                                onKeyDown={(e) => e.key === 'Enter' && addNewColumn()}
+                                onChange={onNewColumnTitleChange}
+                            />
+
+                            <Button variant="success" size="sm" onClick={addNewColumn}>
+                                Add column
+                            </Button>
+
+                            <span className="cancel-new-column" onClick={toggleOpenNewColumnForm}>
+                                <i className="fa fa-times icon" />
+                            </span>
+                        </Col>
+                    </Row>
+                )}
+            </BootstrapContainer>
         </div>
     );
 };
