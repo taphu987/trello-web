@@ -7,7 +7,7 @@ $column-height: calc(#{$board-content-height} - #{$gap * 2});
 .column {
     flex: 0 0 auto;
     width: 360px;
-    // max-width: 360px;
+    max-width: 360px;
     height: $column-height;
     margin-left: $gap;
 
@@ -17,7 +17,7 @@ $column-height: calc(#{$board-content-height} - #{$gap * 2});
     }
 
     header.column-drag-handle {
-        padding-left: 15px;
+        padding: 5px 8px;
         height: $column-header-height;
         line-height: $column-header-height;
         font-size: 16px;
@@ -25,6 +25,47 @@ $column-height: calc(#{$board-content-height} - #{$gap * 2});
         border-top-left-radius: $column-border-radius;
         border-top-right-radius: $column-border-radius;
         cursor: move;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .column-title {
+        }
+
+        .column-dropdown-actions {
+            button.dropdown-btn {
+                padding: 0 8px 3px $gap;
+                margin-bottom: 15px;
+                font-size: 16px;
+                justify-content: center;
+                font-weight: bold;
+                letter-spacing: 2px;
+                color: $app-main-text-color;
+
+                &:after {
+                    content: '...';
+                    border: none;
+                }
+
+                &:hover {
+                    // background-color: #dadce3;
+                    background-color: darken($color: $colum-bg-color, $amount: 8);
+                }
+            }
+
+            .dropdown-menu {
+                padding: 0;
+                min-width: 200px;
+                a.dropdown-item {
+                    padding: 0.1rem 1rem;
+                    font-size: 14px;
+
+                    &:not(:last-child) {
+                        border-bottom: 1px solid $colum-bg-color;
+                    }
+                }
+            }
+        }
     }
 
     footer {
