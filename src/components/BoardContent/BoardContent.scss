@@ -58,6 +58,10 @@
         .input-enter-new-column {
             // padding: 10px;
             margin-bottom: 5px;
+
+            &:focus {
+                border-color: $input-border-color;
+            }
         }
 
         .cancel-new-column {
