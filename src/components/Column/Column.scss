@@ -8,7 +8,7 @@ $column-height: calc(#{$board-content-height} - #{$gap * 2});
     flex: 0 0 auto;
     width: 360px;
     max-width: 360px;
-    height: $column-height;
+    max-height: $column-height;
     margin-left: $gap;
 
     > * {
@@ -29,8 +29,8 @@ $column-height: calc(#{$board-content-height} - #{$gap * 2});
         flex-direction: row;
         justify-content: space-between;
 
-        .column-title {
-        }
+        // .column-title {
+        // }
 
         .column-dropdown-actions {
             button.dropdown-btn {
@@ -70,7 +70,8 @@ $column-height: calc(#{$board-content-height} - #{$gap * 2});
 
     footer {
         padding-left: $gap;
-        height: $column-footer-height;
+        min-height: $column-footer-height;
+        // min-height: $gap;
         line-height: $column-footer-height;
         border-bottom-left-radius: $column-border-radius;
         border-bottom-right-radius: $column-border-radius;
@@ -120,6 +121,18 @@ $column-height: calc(#{$board-content-height} - #{$gap * 2});
             background-color: rgba(150, 150, 200, 0.1);
             border: 1px dashed #abc;
             margin: 5px;
+        }
+
+        .add-new-card-area {
+            .textarea-enter-new-card {
+                min-height: 54px;
+                max-height: 162px;
+            }
+
+            .form-control::placeholder {
+                /* Chrome, Firefox, Opera, Safari 10.1+ */
+                opacity: 0.6; /* Firefox */
+            }
         }
     }
 }
