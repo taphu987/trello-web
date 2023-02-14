@@ -141,7 +141,9 @@ const Column = (props) => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu style={{ margin: 0 }}>
-                            <Dropdown.Item>Add card...</Dropdown.Item>
+                            <Dropdown.Item onClick={toggleOpenNewCardForm}>
+                                Add card...
+                            </Dropdown.Item>
                             <Dropdown.Item onClick={toggleShowConfirmModal}>
                                 Remove column...
                             </Dropdown.Item>
